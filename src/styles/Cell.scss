@@ -1,0 +1,21 @@
+.cell {
+  width: 60px;
+  height: 60px;
+  border: 1px solid #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;
+  cursor: pointer;
+  user-select: none;
+
+  &--disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  &--highlight {
+    background-color: #1bac2c;
+    color: #000;
+  }
+}
