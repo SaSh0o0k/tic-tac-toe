@@ -1,5 +1,9 @@
 .board {
   display: grid;
-  gap: 2px;
-  margin: 20px auto;
+  gap: 6px;
+  background: #e2e8f0;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: fit-content;
 }

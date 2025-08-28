@@ -4,8 +4,7 @@ import PlayerInfo from "./components/PlayerInfo";
 import Controls from "./components/Controls";
 import Modal from "react-modal";
 import { useTimer, formatMs } from "./hooks/useTimer";
-import { WIN_COUNT } from "./interfaces/constants";
-import type { WinnerResult } from "./interfaces/app";
+import { checkWinner } from "./utils/game";
 import "./styles/App.scss";
 
 Modal.setAppElement("#root");
@@ -26,7 +25,6 @@ const App: React.FC = () => {
   const [player1Time, setPlayer1Time] = useTimer(currentPlayer === "X" && gameActive);
   const [player2Time, setPlayer2Time] = useTimer(currentPlayer === "O" && gameActive);
 
-  // змінюємо розмір тільки у pending
   const handleSizeChange = (newSize: number) => {
     setPendingSize(newSize);
   };
@@ -42,50 +40,6 @@ const App: React.FC = () => {
     setPlayer2Time(0);
     setGameActive(true);
   };
-
-  const checkWinner = (cells: string[], size: number): WinnerResult | null => {
-    const directions = [
-      { dr: 0, dc: 1 },  // рядок
-      { dr: 1, dc: 0 },  // колонка
-      { dr: 1, dc: 1 },  // діагональ \
-      { dr: 1, dc: -1 }, // діагональ /
-    ];
-
-    for (let r = 0; r < size; r++) {
-      for (let c = 0; c < size; c++) {
-        const startIdx = r * size + c;
-        const player = cells[startIdx];
-        if (!player) continue;
-
-        for (const { dr, dc } of directions) {
-          const line: number[] = [];
-          let won = true;
-
-          for (let k = 0; k < WIN_COUNT; k++) {
-            const nr = r + dr * k;
-            const nc = c + dc * k;
-            if (nr >= size || nr < 0 || nc >= size || nc < 0) {
-              won = false;
-              break;
-            }
-            const idx = nr * size + nc;
-            if (cells[idx] !== player) {
-              won = false;
-              break;
-            }
-            line.push(idx);
-          }
-
-          if (won) return { winner: player as "X" | "O", line };
-        }
-      }
-    }
-
-    if (cells.every((c) => c)) return { winner: "draw" };
-
-    return null;
-  };
-
 
   const handleCellClick = (index: number) => {
     if (!gameActive || cells[index] !== "") return;
